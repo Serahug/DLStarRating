@@ -18,14 +18,14 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (id)initWithDefault:(UIImage*)star highlighted:(UIImage*)highlightedStar position:(int)index allowFractions:(BOOL)fractions {
+- (id)initWithDefault:(UIImage*)star highlighted:(UIImage*)highlightedStar position:(int)index allowFractions:(BOOL)fractions numberOfFractions:(int)numberOfFractions {
 	self = [super initWithFrame:CGRectZero];
     
 	if (self) {
         [self setTag:index];
         if (fractions) {
-            highlightedStar = [self croppedImage:highlightedStar];
-            star = [self croppedImage:star];
+            highlightedStar = [self croppedImage:highlightedStar numberOfFractions:numberOfFractions];
+            star = [self croppedImage:star numberOfFractions:numberOfFractions];
         }
         self.frame = CGRectMake((star.size.width*index), 0, star.size.width, star.size.height+kEdgeInsetBottom);
         [self setStarImage:star highlightedStarImage:highlightedStar];
@@ -41,9 +41,9 @@
 }
 
 
-- (UIImage *)croppedImage:(UIImage*)image {
-    float partWidth = image.size.width/kNumberOfFractions * image.scale;
-    int part = (self.tag+kNumberOfFractions)%kNumberOfFractions;
+- (UIImage *)croppedImage:(UIImage*)image numberOfFractions:(int)numberOfFractions {
+    float partWidth = image.size.width/numberOfFractions * image.scale;
+    int part = (self.tag+numberOfFractions)%numberOfFractions;
     float xOffset = partWidth*part;
     CGRect newFrame = CGRectMake(xOffset, 0, partWidth , image.size.height * image.scale);
     CGImageRef resultImage = CGImageCreateWithImageInRect([image CGImage], newFrame);

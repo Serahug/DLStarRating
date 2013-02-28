@@ -13,12 +13,13 @@
 #import <UIKit/UIKit.h>
 
 #define kDefaultNumberOfStars 5
-#define kNumberOfFractions 10
+#define kDefaultNumberOfFractions 10
 
 @protocol DLStarRatingDelegate;
 
 @interface DLStarRatingControl : UIControl {
 	int numberOfStars;
+    int numberOfFractions;
 	int currentIdx;
 	UIImage *star;
 	UIImage *highlightedStar;
@@ -28,6 +29,7 @@
 
 - (id)initWithFrame:(CGRect)frame;
 - (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)_numberOfStars isFractional:(BOOL)isFract;
+- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)_numberOfStars isFractional:(BOOL)isFract numberOfFractions:(NSUInteger)_numberOfFractions;
 - (void)setStar:(UIImage*)defaultStarImage highlightedStar:(UIImage*)highlightedStarImage;
 - (void)setStar:(UIImage*)defaultStarImage highlightedStar:(UIImage*)highlightedStarImage atIndex:(int)index;
 

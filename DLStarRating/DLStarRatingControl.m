@@ -29,7 +29,7 @@
 	highlightedStar = [[UIImage imageNamed:@"star_highlighted.png"] retain];    
 
 	for (int i=0; i<numberOfStars; i++) {
-		DLStarView *v = [[DLStarView alloc] initWithDefault:self.star highlighted:self.highlightedStar position:i allowFractions:isFractionalRatingEnabled];
+		DLStarView *v = [[DLStarView alloc] initWithDefault:self.star highlighted:self.highlightedStar position:i allowFractions:isFractionalRatingEnabled numberOfFractions:numberOfFractions];
 		[self addSubview:v];
 		[v release];
 	}
@@ -39,8 +39,9 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
 		numberOfStars = kDefaultNumberOfStars;
+        numberOfFractions = kDefaultNumberOfFractions;
         if (isFractionalRatingEnabled)
-            numberOfStars *=kNumberOfFractions;
+            numberOfStars *= numberOfFractions;
 		[self setupView];
     }
     return self;
@@ -50,21 +51,29 @@
 	self = [super initWithFrame:frame];
 	if (self) {
 		numberOfStars = kDefaultNumberOfStars;
+        numberOfFractions = kDefaultNumberOfFractions;
         if (isFractionalRatingEnabled)
-            numberOfStars *=kNumberOfFractions;
+            numberOfStars *= numberOfFractions;
         [self setupView];
 
 	}
 	return self;
 }
 
-- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)_numberOfStars isFractional:(BOOL)isFract{
-	self = [super initWithFrame:frame];
+- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)_numberOfStars isFractional:(BOOL)isFract {
+
+    return [self initWithFrame:frame andStars:_numberOfStars isFractional:isFract numberOfFractions:kDefaultNumberOfFractions];
+}
+
+- (id)initWithFrame:(CGRect)frame andStars:(NSUInteger)_numberOfStars isFractional:(BOOL)isFract numberOfFractions:(NSUInteger)_numberOfFractions
+{
+    self = [super initWithFrame:frame];
 	if (self) {
         isFractionalRatingEnabled = isFract;
 		numberOfStars = _numberOfStars;
+        numberOfFractions = _numberOfFractions;
         if (isFractionalRatingEnabled)
-            numberOfStars *=kNumberOfFractions;
+            numberOfStars *= numberOfFractions;
 		[self setupView];
 	}
 	return self;
@@ -187,7 +196,7 @@
 
 - (void)setRating:(float)_rating {
     if (isFractionalRatingEnabled) {
-        _rating *=kNumberOfFractions;
+        _rating *= numberOfFractions;
     }
 	[self disableStarsDownTo:0];
 	currentIdx = (int)_rating-1;
@@ -196,7 +205,7 @@
 
 - (float)rating {
     if (isFractionalRatingEnabled) {
-        return (float)(currentIdx+1)/kNumberOfFractions;
+        return (float)(currentIdx+1)/numberOfFractions;
     }
 	return (NSUInteger)currentIdx+1;
 }
